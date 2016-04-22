@@ -1,6 +1,6 @@
 from xmlrpc.server import SimpleXMLRPCServer
 from xmlrpc.server import SimpleXMLRPCRequestHandler
-from time import sleep
+import time
 
 # Restrict to a particular path.
 class RequestHandler(SimpleXMLRPCRequestHandler):
@@ -12,8 +12,9 @@ class RPCServer(SimpleXMLRPCServer):
     def handle_timeout(self):
         print("I'm alive")
 
+
 server = RPCServer(("localhost", 8000),requestHandler=RequestHandler)
-server.timeout = 5
+#server.timeout = 0.01
 
 server.register_introspection_functions()
 
@@ -23,7 +24,6 @@ server.register_function(pow)
 
 # Register a function under a different name
 def adder_function(x,y):
-    #sleep(1)
     return x + y
 server.register_function(adder_function, 'add')
 
@@ -38,7 +38,7 @@ server.register_instance(MyFuncs())
 # Run the server's main loop
 while True:
     server.handle_request()
-    #sleep(1)
+    print(time.time())
 
 
 
