@@ -3,9 +3,9 @@ import json
 
 
 def main():
-    url = "http://10.46.200.74:4000/jsonrpc"
+    url = "http://localhost:4000/jsonrpc"
     headers = {'content-type': 'application/json'}
-    '''
+
     # Example echo method
     payload = {
         "method": "echo",
@@ -15,11 +15,11 @@ def main():
     }
     response = requests.post(
         url, data=json.dumps(payload), headers=headers).json()
-
+    print(response)
     print(response["result"] == "echome!")
     print(response["jsonrpc"] == "2.0")
     print(response["id"] == 0)
-    print(response)
+
 
     # Example echo method JSON-RPC 1.0
     payload = {
@@ -29,12 +29,12 @@ def main():
     }
     response = requests.post(
         url, data=json.dumps(payload), headers=headers).json()
-
+    print(response)
     print(response["result"] == "echome!")
     #print(response["error"])
     print(response["id"] == 0)
     print("jsonrpc" not in response)
-    print(response)
+
 
     # Example add method
     payload = {
@@ -45,11 +45,11 @@ def main():
     }
     response = requests.post(
         url, data=json.dumps(payload), headers=headers).json()
-
+    print(response)
     print(response["result"] == 3)
     print(response["jsonrpc"] == "2.0")
     print(response["id"] == 1)
-    print(response)
+
 
     # Example foobar method
     payload = {
@@ -62,7 +62,7 @@ def main():
         url, data=json.dumps(payload), headers=headers).json()
 
     print(response)
-    print(response["result"] == "json-rpc")
+    #print(response["result"] == "json-rpc")
     print(response["jsonrpc"] == "2.0")
     print(response["id"] == 3)
 
@@ -76,13 +76,13 @@ def main():
     }
     response = requests.post(
         url, data=json.dumps(payload), headers=headers).json()
-
+    print(response)
     print(response["error"]["message"] == "Invalid params")
     print(response["error"]["code"] == -32602)
     print(response["jsonrpc"] == "2.0")
     print(response["id"] == 4)
-    print(response)
-    '''
+
+
     payload = {
         "method": "pussy",
         "params": ['fagot','qwe'],

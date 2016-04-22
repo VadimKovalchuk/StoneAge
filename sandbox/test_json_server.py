@@ -5,6 +5,7 @@ import time
 from jsonrpc import JSONRPCResponseManager, dispatcher
 
 
+
 @dispatcher.add_method
 def foobar(**kwargs):
     return kwargs["foo"] + kwargs["bar"]
@@ -26,7 +27,7 @@ def application(request):
 
 
 if __name__ == '__main__':
-    run_simple('10.46.200.74', 4000, application)
+    run_simple('localhost', 4000, application)
     while True:
         print("tick")
         time.sleep(1)
