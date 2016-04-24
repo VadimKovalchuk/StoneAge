@@ -1,9 +1,17 @@
-from core import Core
+import root
+import json_handle
 
-def  main():
+def main():
+    core = root.Core()
+    gate = json_handle.Gate()
 
-    core = Core()
-    print(core.status())
+    infra = [core,gate]
+    for module in infra:
+        module.build_connections()
+
+
+
+    gate.start()
 
 if __name__ == '__main__':
     main()
