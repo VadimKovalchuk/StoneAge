@@ -1,4 +1,4 @@
-import json_handle
+import json_handle, db
 import players
 import wizard
 
@@ -8,15 +8,6 @@ class Core:
     all others.
     '''
 
-    #Singletone declaration
-    _instance = None
-    def __new__(cls, *args, **kwargs):
-        if not cls._instance:
-            cls._instance = super(Core, cls).__new__(
-                                cls, *args, **kwargs)
-        return cls._instance
-    #Singletone declaration is finished
-
     def __init__(self):
         '''
         (list) -> None
@@ -24,6 +15,7 @@ class Core:
         Initial class creation. Without connection to infrastructure.
         '''
         self.gate = None
+        self.db = None
         self.sessions = []
         self.wizards = []
         self.players = []
@@ -31,8 +23,10 @@ class Core:
 
         return None
 
-    def build_connections(self):
-        self.gate = json_handle.Gate()
+    def build_connections(self, infra):
+        self.gate = infra['gate']
+        self.db = infra['database']
+        return None
 
     def start_session(self,wizard):
         pass
