@@ -1,6 +1,4 @@
-import json_handle, db
-import players
-import wizard
+import logging, players, wizard
 
 class Core:
     '''
@@ -19,13 +17,14 @@ class Core:
         self.sessions = []
         self.wizards = []
         self.players = []
-        print(self)
+        logging.debug('Core is ready')
 
         return None
 
     def build_connections(self, infra):
         self.gate = infra['gate']
         self.db = infra['database']
+        logging.debug('Core connections are established')
         return None
 
     def start_session(self,wizard):

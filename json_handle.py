@@ -1,7 +1,7 @@
 from werkzeug.wrappers import Request, Response
 from werkzeug.serving import run_simple
 from jsonrpc import JSONRPCResponseManager, dispatcher
-import session
+import session, logging
 # @dispatcher.add_method
 # def foobar(**kwargs):
 #     return kwargs["foo"] + kwargs["bar"]
@@ -13,13 +13,14 @@ class Gate:
         self.db = None
         self.wizards = []
         self.players = {}
-        print(self)
+        logging.debug('Gate is ready')
 
         return None
 
     def build_connections(self,infra):
         self.core = infra['core']
         self.db = infra['database']
+        logging.debug('Gate connections are established')
         return None
 
     def allocation_command(self,strin):
@@ -30,7 +31,7 @@ class Gate:
         return True
 
     def player_connect(self, login, password):
-        player_id =1 #self.db.get_user_id(login, password)
+        player_id =self.db.player_login(login, password)
         current_session = self.core.get_session_by_player(player_id)
         return {'id':player_id,'session_type':str(type(current_session))}
 
