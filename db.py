@@ -13,7 +13,7 @@ class Database:
         '''
         self.core = None
         self.gate = None
-        self.db = sqlite3.connect('database\\' + 'general.db')
+        self.db = sqlite3.connect('database/general.db')
         self.db_cursor = self.db.cursor()
 
         logging.debug('Database is ready')

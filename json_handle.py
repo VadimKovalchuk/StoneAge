@@ -33,6 +33,8 @@ class Gate:
     def player_connect(self, login, password):
         player_id =self.db.player_login(login, password)
         current_session = self.core.get_session_by_player(player_id)
+        if(not current_session):
+            current_session = self.core.add_player(player_id)
         return {'id':player_id,'session_type':str(type(current_session))}
 
     @Request.application
