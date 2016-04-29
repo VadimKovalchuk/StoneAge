@@ -20,9 +20,11 @@ class Wizard:
         '''
         (None) -> Dict
         '''
-        result =self.rules.copy()
-        result['wizard_id':self.id]
-
+        print('status:')
+        result = self.rules.copy()
+        print(result)
+        result['wizard_id']= self.id
+        print(result)
         return result
 
 

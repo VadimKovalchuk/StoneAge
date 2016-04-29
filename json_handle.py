@@ -35,9 +35,11 @@ class Gate:
 
     def status(self, player_id):
         current_inst = self.core.get_instance_by_player(int(player_id))
-        print(current_inst.status())
+        print('inst.status:',current_inst.status())
         if(current_inst):
             return current_inst.status()
+        else:
+            return False
 
     def allocation_command(self,strin):
         curent_session = self.core.get_session_by_player(id)
