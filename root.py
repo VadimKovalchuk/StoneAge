@@ -53,19 +53,18 @@ class Core:
         self.wizards.append(new_wiz)
         return new_wiz
 
-    def get_session_by_player(self,id):
+    def get_instance_by_player(self,id):
         '''
         (int) -> Session
 
-        Returns session that player with passed ID participates.
-        In case is player does not exists - returns false.
+        Returns session/wizard that player with passed ID bind to.
+        In case if player does not exists - returns false.
         '''
         for player in self.players:
             if player.id == id:
                 return player.session
         else:
             False
-
 
 
     def status(self):

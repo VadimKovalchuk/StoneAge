@@ -4,8 +4,9 @@ import json
 player = None
 url = "http://localhost:4000/jsonrpc"
 headers = {'content-type': 'application/json'}
-command_list = {'connect':['login', 'password']}
-command_flows = {}
+command_list = {'connect':['login', 'password'],
+                'status':['player_id']}
+
 
 def send_request(method,params,id):
     '''
@@ -57,6 +58,8 @@ def login_flow():
 
 
 def main():
+
+    command_flows = {'connect': login_flow()}
 
     player_id = login_flow()
 
