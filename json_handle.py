@@ -1,7 +1,8 @@
 from werkzeug.wrappers import Request, Response
 from werkzeug.serving import run_simple
 from jsonrpc import JSONRPCResponseManager, dispatcher
-import session, logging
+import session, logging,json
+import codecs
 # @dispatcher.add_method
 # def foobar(**kwargs):
 #     return kwargs["foo"] + kwargs["bar"]
@@ -13,6 +14,7 @@ class Gate:
         self.db = None
         self.wizards = []
         self.players = {}
+        self.request = None
         logging.debug('Gate is ready')
 
         return None
@@ -33,9 +35,10 @@ class Gate:
                 'session_id':current_session.id
                 }
 
-    def status(self, player_id):
-        current_inst = self.core.get_instance_by_player(int(player_id))
-        print('inst.status:',current_inst.status())
+    def status(self):
+        player_id = int(self.request["id"])
+        current_inst = self.core.get_instance_by_player(player_id)
+        #print('inst.status:',current_inst.status())
         if(current_inst):
             return current_inst.status()
         else:
@@ -50,6 +53,7 @@ class Gate:
 
     @Request.application
     def application(self,request):
+        self.request = json.loads(request.data.decode("utf-8"))
         # Dispatcher is dictionary {<method_name>: callable}
         dispatcher["connect"] = self.player_connect
         dispatcher["status"] = self.status

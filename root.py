@@ -66,6 +66,35 @@ class Core:
         else:
             False
 
+    def update_wizard(self, wiz):
+        '''
+        (Wizard) -> None
+
+        Updates passed wizard instance according to condition parameters.
+        '''
+        if 'merge' in wiz.conditions:
+            master_wiz_id = wiz.conditions['merge']
+            master_wiz = self.get_instance_by_player(master_wiz_id)
+            if type(master_wiz) != type(wizard.Wizard):
+                logging.error("Wrong class is detected when Wizard expected")
+            master_wiz.add_player(wiz.players[0])
+            self.wizards.remove(wiz)
+        elif wiz.conditions['players'] > len(wiz.players):
+            ia_amount = wiz.conditions['players'] - len(wiz.players)
+            # self.create_ai(ai_amount,wiz.id)
+
+
+    def update(self):
+        '''
+        (None) -> None
+
+        Updates all session and wizard instances.
+        '''
+        for wiz in self.wizards:
+            if wiz.conditions['state'] == 'ready':
+                self.update_wizard(wiz)
+        return None
+
 
     def status(self):
         return "started"

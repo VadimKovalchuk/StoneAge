@@ -8,9 +8,10 @@ class Wizard:
         '''
         self.id = initial_player.id
         self.players = [initial_player]
-        self.rules = {'mode': 'single',
-                      'players':4,
-                      'map':'default'}
+        self.conditions = {'mode': 'single',
+                           'players': 4,
+                           'map': 'default',
+                           'state': 'desicion'}
 
         self.players[0].set_session(self)
 
@@ -20,13 +21,9 @@ class Wizard:
         '''
         (None) -> Dict
         '''
-        print('status:')
         result = self.rules.copy()
-        print(result)
         result['wizard_id']= self.id
-        print(result)
         return result
-
 
     def add_player(self, new_player):
         '''
