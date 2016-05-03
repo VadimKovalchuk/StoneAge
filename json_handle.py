@@ -1,8 +1,8 @@
 from werkzeug.wrappers import Request, Response
 from werkzeug.serving import run_simple
 from jsonrpc import JSONRPCResponseManager, dispatcher
-import session, logging,json
-import codecs
+import session, wizard, logging,json
+
 # @dispatcher.add_method
 # def foobar(**kwargs):
 #     return kwargs["foo"] + kwargs["bar"]
@@ -28,7 +28,7 @@ class Gate:
     def player_connect(self, login, password):
         player_id =self.db.player_login(login, password)
         current_session = self.core.get_instance_by_player(player_id)
-        if(not current_session):
+        if not current_session :
             current_session = self.core.add_player(player_id)
         return {'id':player_id,
                 'session_type':str(type(current_session)),
@@ -39,9 +39,21 @@ class Gate:
         player_id = int(self.request["id"])
         current_inst = self.core.get_instance_by_player(player_id)
         #print('inst.status:',current_inst.status())
-        if(current_inst):
+        self.core.update()
+        if current_inst:
             return current_inst.status()
         else:
+            return False
+
+    def wizard_conditions(self,new_conditions):
+        player_id = int(self.request["id"])
+        current_inst = self.core.get_instance_by_player(player_id)
+        self.core.update()
+        if current_inst and 'Wizard' in str(type(current_inst)):
+            return current_inst.change_conditions(new_conditions)
+        else:
+            logging(str(type(current_inst))+ " is returned when Wizard "
+                                             "instance expected")
             return False
 
     def allocation_command(self,strin):
@@ -57,6 +69,7 @@ class Gate:
         # Dispatcher is dictionary {<method_name>: callable}
         dispatcher["connect"] = self.player_connect
         dispatcher["status"] = self.status
+        dispatcher["wizard_conditions"] = self.wizard_conditions
         dispatcher["allocate"] = self.allocation_command
 
 

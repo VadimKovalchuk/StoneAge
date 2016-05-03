@@ -1,4 +1,5 @@
-import logging, players, wizard
+from subprocess import Popen
+import logging, players, wizard,os
 
 class Core:
     '''
@@ -72,16 +73,23 @@ class Core:
 
         Updates passed wizard instance according to condition parameters.
         '''
-        if 'merge' in wiz.conditions:
-            master_wiz_id = wiz.conditions['merge']
+        print('Processing wizard '+str(wiz.id))
+        if int(wiz.conditions['merge']) != wiz.id:
+            master_wiz_id = int(wiz.conditions['merge'])
             master_wiz = self.get_instance_by_player(master_wiz_id)
-            if type(master_wiz) != type(wizard.Wizard):
+            if 'Wizard' not in str(type(master_wiz)):
                 logging.error("Wrong class is detected when Wizard expected")
             master_wiz.add_player(wiz.players[0])
             self.wizards.remove(wiz)
-        elif wiz.conditions['players'] > len(wiz.players):
-            ia_amount = wiz.conditions['players'] - len(wiz.players)
-            # self.create_ai(ai_amount,wiz.id)
+        elif int(wiz.conditions['players']) > len(wiz.players):
+            new_ai = self.db.get_free_ai()
+            if new_ai:
+                args = ['python3', os.getcwd()+'/ai.py',new_ai['login'],new_ai['pass'],wiz.id]
+                print(args)
+                #Popen(args,shell=False,stdin=None,stdout=None,stderr=None,close_fds=True)
+                pass
+
+        return None
 
 
     def update(self):

@@ -1,3 +1,5 @@
+import logging
+
 class Wizard:
 
     def __init__(self, initial_player):
@@ -9,20 +11,37 @@ class Wizard:
         self.id = initial_player.id
         self.players = [initial_player]
         self.conditions = {'mode': 'single',
-                           'players': 4,
+                           'players': str(4),
                            'map': 'default',
-                           'state': 'desicion'}
+                           'state': 'desicion',
+                           'merge': str(self.id)}
 
         self.players[0].set_session(self)
 
         return None
 
+    def change_conditions(self,new_values):
+        '''
+        (dict) -> bool
+
+        Changes conditions for session creation.
+        '''
+        for parameter in new_values:
+            if parameter in self.conditions:
+                self.conditions[parameter]= new_values[parameter]
+            else:
+                logging.error("Wrong parameter is sent to Wizard ["+ self.id
+                              +"] conditions")
+                return False
+        return True
+
     def status(self):
         '''
         (None) -> Dict
         '''
-        result = self.rules.copy()
+        result = self.conditions.copy()
         result['wizard_id']= self.id
+        result['current_players'] = [ player.id for player in self.players]
         return result
 
     def add_player(self, new_player):

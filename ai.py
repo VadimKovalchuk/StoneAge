@@ -1,5 +1,5 @@
 import requests
-import json
+import json, sys
 
 player = None
 
@@ -50,36 +50,33 @@ def login_flow():
     '''
     response = None
 
-    for attempt in range(1,4):
-        args = get_command_arguments('connect')
-        response = send_request('connect',args,0)
-        assert response['id'] != str(0), 'Invalid ID is rescieved for connect request'
-        if('result' in response):
-            id = response['result']['id']
-            return id
-        print('Attempt',attempt,'failed.')
-    print('Login failed!')
+    args = {"login": sys.argv[1], "password": sys.argv[2]}
+    response = send_request('connect',args,0)
+    assert response['id'] != str(0), 'Invalid ID is rescieved for connect request'
+    if('result' in response):
+        id = response['result']['id']
+        return id
 
 def update_wizard(player_id):
     '''
 
     '''
-    args = {'new_conditions':{'merge': '1000', 'state': 'ready'}}
+    args = {'new_conditions':{'merge': sys.argv[3], 'state': 'ready'}}
     print(send_request('wizard_conditions',args,player_id))
 
 command_flows = {'connect': login_flow,
                  'wizard_conditions':update_wizard}
 
 def main():
-
-    player_id = None
-
     command_list =[key for key in command_args]
-
-
+    print(sys.argv)
+    player_id = login_flow()
+    print('AI '+ str(player_id) + '(' + sys.argv[1] + '/'+ sys.argv[2] +') is created. merging it to wizard '+ sys.argv[3])
+    update_wizard(player_id)
+    send_request('status',[],player_id)
+    print(send_request('status',[],player_id))
+    '''
     while True:
-        if not player_id:
-            player_id = login_flow()
         print('\nCommand list')
 
         for i in range(0, len(command_list)):
@@ -95,7 +92,7 @@ def main():
             print(command_flows[cmd](player_id))
         else:
             print(send_request(cmd,args,player_id))
-
+    '''
 
 if __name__ == "__main__":
     main()
