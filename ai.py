@@ -1,5 +1,5 @@
 import requests
-import json, sys
+import json, sys,time
 
 player = None
 
@@ -75,6 +75,10 @@ def main():
     update_wizard(player_id)
     send_request('status',[],player_id)
     print(send_request('status',[],player_id))
+
+    for i in range(0,10):
+        print(send_request('status',[],player_id))
+        time.sleep(1)
     '''
     while True:
         print('\nCommand list')
