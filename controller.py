@@ -24,7 +24,7 @@ class Elder:
         self.core_session = None
         self.bot_processes = []  # Running bot processes
         self.requests = []  # Requests that sent by Core
-        self.periods = {'core_update': 250,
+        self.periods = {'core_update': 1000,
                         'process_creation': 1000,
                         'git_update': 3600000}
         logging.debug('Elder is running')
@@ -51,8 +51,8 @@ def main():
         if responce['result']:
             print('processing tasks' + str(responce))
         processing_time = time.time() - start_time
-        print('utilization: '+ str(processing_time ))#* 1000 / elder.periods['core_update']))
-        #time.sleep(elder.periods['core_update'] / 1000 - processing_time)
+        print('utilization: '+ str(processing_time * 1000 / elder.periods['core_update']))
+        time.sleep(elder.periods['core_update'] / 1000 - processing_time)
 
 
 if __name__ == '__main__':

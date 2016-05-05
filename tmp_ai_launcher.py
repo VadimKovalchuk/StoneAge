@@ -18,7 +18,7 @@ def main():
         if system() == 'Windows':
             args = python_path +' C:\\tmp\\ai.py' + ' ' + bots[bot]['login'] + ' ' + bots[bot]['pass'] + ' ' + str(wiz_id)
         elif system() == 'Linux':
-            pass
+            args = 'python3 /home/scorcher/repos/StoneAge/ai.py' + ' ' + bots[bot]['login'] + ' ' + bots[bot]['pass'] + ' ' + str(wiz_id)
         else:
             assert True, "Unsupported system detected"
         print(args)

@@ -18,7 +18,7 @@ class Core:
         self.sessions = []  # active sessions
         self.wizards = []   # wizards of active players
         self.players = []   # Active players
-        self.requests = []  # Requests that sent to Elder
+        self.elder_tasks = []#Requests that sent to Elder
         logging.debug('Core is ready')
 
         return None
@@ -74,6 +74,18 @@ class Core:
 
         Updates passed wizard instance according to condition parameters.
         '''
+        def find_bot_in_task_list(id):
+            '''
+            (int) -> bool
+
+            Validates if bot is already exists in Elder task list.
+            '''
+            for task in self.elder_tasks:
+                if 'add_bot' in task and task['add_bot']['id'] == id:
+                    return True
+            else:
+                False
+        # Players are merging to one wizard. Redundant wizard is deleted.
         if int(wiz.conditions['merge']) != wiz.id:
             master_wiz_id = int(wiz.conditions['merge'])
             master_wiz = self.get_instance_by_player(master_wiz_id)
@@ -81,13 +93,16 @@ class Core:
                 logging.error("Wrong class is detected when Wizard expected")
             master_wiz.add_player(wiz.players[0])
             self.wizards.remove(wiz)
+
+        # When player(s) ready to start session - remaining player slots are
+        # filled with bots.
         elif int(wiz.conditions['players']) > len(wiz.players):
             for i in range(0,int(wiz.conditions['players']) > len(wiz.players)):
                 new_ai = self.db.get_free_ai()
-                if new_ai:
-                    print(new_ai,self.requests)
-                    self.requests.append({'add_bot':new_ai,})
-                    print(self.requests)
+                if new_ai and not find_bot_in_task_list(new_ai['id']):
+                    print(new_ai, self.elder_tasks)
+                    self.elder_tasks.append({'add_bot':new_ai,})
+                    print(self.elder_tasks)
 
         return None
 
@@ -106,8 +121,8 @@ class Core:
         for session in self.sessions:
             pass
         '''
-        for request in self.requests:
+        for request in self.elder_tasks:
             if 'add_bot' in request and self.get_instance_by_player(request['add_bot']['id']):
-                self.requests.remove(request)
+                self.elder_tasks.remove(request)
 
-        return self.requests
+        return self.elder_tasks

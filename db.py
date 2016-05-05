@@ -52,7 +52,7 @@ class Database:
             bot_id = row[0]
             login = row[1]
             pas = row[2]
-            if not self.core.get_instance_by_player(id):
+            if not self.core.get_instance_by_player(bot_id):
                 return {'id':bot_id,'login': login, 'pass': pas}
 
         return False
