@@ -2,7 +2,7 @@ import root,json_handle,db, logging
 
 def main():
     logging.basicConfig(filename='log/core.log', level=logging.DEBUG)
-    logging.info('Init infrastructure classes')
+    logging.info('Init base classes')
 
     core = root.Core()
     gate = json_handle.Gate()

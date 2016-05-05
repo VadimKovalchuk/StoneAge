@@ -25,6 +25,12 @@ class Gate:
         logging.debug('Gate connections are established')
         return None
 
+    def update(self):
+        if int(self.request["id"]) == 1:
+            return self.core.update()
+        else:
+            return 'Error'
+
     def player_connect(self, login, password):
         player_id =self.db.player_login(login, password)
         current_session = self.core.get_instance_by_player(player_id)
@@ -39,7 +45,6 @@ class Gate:
         player_id = int(self.request["id"])
         current_inst = self.core.get_instance_by_player(player_id)
         #print('inst.status:',current_inst.status())
-        self.core.update()
         if current_inst:
             return current_inst.status()
         else:
@@ -48,12 +53,11 @@ class Gate:
     def wizard_conditions(self,new_conditions):
         player_id = int(self.request["id"])
         current_inst = self.core.get_instance_by_player(player_id)
-        self.core.update()
         if current_inst and 'Wizard' in str(type(current_inst)):
             return current_inst.change_conditions(new_conditions)
         else:
-            logging(str(type(current_inst))+ " is returned when Wizard "
-                                             "instance expected")
+            logging.info(str(type(current_inst))+ " is returned when Wizard "
+                                                  "instance expected")
             return False
 
     def allocation_command(self,strin):
@@ -67,6 +71,7 @@ class Gate:
     def application(self,request):
         self.request = json.loads(request.data.decode("utf-8"))
         # Dispatcher is dictionary {<method_name>: callable}
+        dispatcher["update"] = self.update
         dispatcher["connect"] = self.player_connect
         dispatcher["status"] = self.status
         dispatcher["wizard_conditions"] = self.wizard_conditions
