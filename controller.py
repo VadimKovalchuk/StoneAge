@@ -35,13 +35,15 @@ class Elder:
     def _create_bot(self, credent_dict):
         args = ''
         if system() == 'Windows':
-            args = python_path +' ai.py' + ' ' + credent_dict['login'] + ' ' + credent_dict['pass'] + ' ' + str(credent_dict['merge'])
+            args = python_path +' ai.py' + ' ' + credent_dict['login'] + ' ' + \
+                   credent_dict['pass'] + ' ' + str(credent_dict['merge'])
         elif system() == 'Linux':
-            args = 'python3 /home/scorcher/repos/StoneAge/ai.py' + ' ' + credent_dict['login'] + ' ' + credent_dict['pass'] + ' ' + str(credent_dict['merge'])
+            args = 'python3 ai.py' + ' ' + credent_dict['login'] + ' ' + \
+                   credent_dict['pass'] + ' ' + str(credent_dict['merge'])
         else:
             assert True, "Unsupported system detected"
         #print(args)
-        bot = subprocess.Popen(args)
+        bot = subprocess.Popen(args,shell=True)
         self.bot_processes.append(bot)
 
         return None

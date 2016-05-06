@@ -9,7 +9,14 @@ bots = {1: {'login':'qwe','pass':'123'},
 wiz_id = 1000
 
 def main():
+    '''
+    args = 'ls -lha'
 
+    p = subprocess.Popen(args,shell=True)
+
+    while True:
+        p.poll()
+    '''
     bot_processes = []
 
     for bot in bots:
@@ -18,11 +25,11 @@ def main():
         if system() == 'Windows':
             args = python_path +' C:\\tmp\\ai.py' + ' ' + bots[bot]['login'] + ' ' + bots[bot]['pass'] + ' ' + str(wiz_id)
         elif system() == 'Linux':
-            args = 'python3 /home/scorcher/repos/StoneAge/ai.py' + ' ' + bots[bot]['login'] + ' ' + bots[bot]['pass'] + ' ' + str(wiz_id)
+            args = 'python3 ai.py' + ' ' + bots[bot]['login'] + ' ' + bots[bot]['pass'] + ' ' + str(wiz_id)
         else:
             assert True, "Unsupported system detected"
         print(args)
-        p = subprocess.Popen(args)
+        p = subprocess.Popen(args,shell=True)
         bot_processes.append(p)
         time.sleep(1)
     up = True
