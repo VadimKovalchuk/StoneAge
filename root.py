@@ -81,10 +81,11 @@ class Core:
             Validates if bot is already exists in Elder task list.
             '''
             for task in self.elder_tasks:
-                if 'add_bot' in task and task['add_bot']['id'] == id:
+                if 'id' in task and task['id'] == id:
                     return True
             else:
                 False
+
         # Players are merging to one wizard. Redundant wizard is deleted.
         if int(wiz.conditions['merge']) != wiz.id:
             master_wiz_id = int(wiz.conditions['merge'])
@@ -100,9 +101,9 @@ class Core:
             for i in range(0,int(wiz.conditions['players']) > len(wiz.players)):
                 new_ai = self.db.get_free_ai()
                 if new_ai and not find_bot_in_task_list(new_ai['id']):
-                    print(new_ai, self.elder_tasks)
-                    self.elder_tasks.append({'add_bot':new_ai,})
-                    print(self.elder_tasks)
+                    new_ai['type'] = 'add_bot'
+                    new_ai['merge'] = wiz.id
+                    self.elder_tasks.append(new_ai)
 
         return None
 
@@ -122,7 +123,7 @@ class Core:
             pass
         '''
         for request in self.elder_tasks:
-            if 'add_bot' in request and self.get_instance_by_player(request['add_bot']['id']):
+            if request['type'] == 'add_bot' and self.get_instance_by_player(request['id']):
                 self.elder_tasks.remove(request)
 
         return self.elder_tasks

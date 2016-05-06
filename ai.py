@@ -69,16 +69,16 @@ command_flows = {'connect': login_flow,
 
 def main():
     command_list =[key for key in command_args]
-    print(sys.argv)
+    #print(sys.argv)
     player_id = login_flow()
     print('AI '+ str(player_id) + '(' + sys.argv[1] + '/'+ sys.argv[2] +') is created. merging it to wizard '+ sys.argv[3])
     update_wizard(player_id)
-    send_request('status',[],player_id)
-    print(send_request('status',[],player_id))
+    #send_request('status',[],player_id)
+    #print(send_request('status',[],player_id))
 
     for i in range(0,10):
-        print(send_request('status',[],player_id))
-        time.sleep(1)
+        print('AI '+ str(player_id) + '(' + sys.argv[1] + '/'+ sys.argv[2] +'):'+ str(send_request('status',[],player_id)))
+        time.sleep(5)
     '''
     while True:
         print('\nCommand list')

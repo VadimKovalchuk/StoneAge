@@ -3,6 +3,7 @@ import os, subprocess,time,logging,requests,json
 
 url = "http://localhost:4000/jsonrpc"
 headers = {'content-type': 'application/json'}
+python_path = 'C:\\Users\\vkovalchuk\\AppData\\Local\\Programs\\Python\\Python35-32\\python.exe'
 
 class Elder:
     '''
@@ -31,6 +32,20 @@ class Elder:
 
         return None
 
+    def _create_bot(self, credent_dict):
+        args = ''
+        if system() == 'Windows':
+            args = python_path +' ai.py' + ' ' + credent_dict['login'] + ' ' + credent_dict['pass'] + ' ' + str(credent_dict['merge'])
+        elif system() == 'Linux':
+            args = 'python3 /home/scorcher/repos/StoneAge/ai.py' + ' ' + credent_dict['login'] + ' ' + credent_dict['pass'] + ' ' + str(credent_dict['merge'])
+        else:
+            assert True, "Unsupported system detected"
+        #print(args)
+        bot = subprocess.Popen(args)
+        self.bot_processes.append(bot)
+
+        return None
+
     def update_core(self):
         payload = {"method": "update","params": [],"jsonrpc": "2.0","id": 1}
         response = requests.post(url,
@@ -38,6 +53,16 @@ class Elder:
                              headers=headers).json()
         assert response['id'] != '1', 'Invalid ID is rescieved for connect request'
         return response
+
+    def process_task(self, task_list):
+        #print('processing tasks' + str(task_list))
+        for task in task_list:
+            if task['type'] == 'add_bot':
+                self._create_bot(task)
+                time.sleep(1)
+
+
+        pass
 
 
 def main():
@@ -48,11 +73,11 @@ def main():
     while True:
         start_time = time.time()
         responce = elder.update_core()
-        if responce['result']:
-            print('processing tasks' + str(responce))
+        if 'result' in responce and responce['result']:
+            elder.process_task(responce['result'])
         processing_time = time.time() - start_time
-        print('utilization: '+ str(processing_time * 1000 / elder.periods['core_update']))
-        time.sleep(elder.periods['core_update'] / 1000 - processing_time)
+        if processing_time < elder.periods['core_update'] / 1000:
+            time.sleep(elder.periods['core_update'] / 1000 - processing_time)
 
 
 if __name__ == '__main__':
