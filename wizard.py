@@ -10,11 +10,13 @@ class Wizard:
         '''
         self.id = initial_player.id
         self.players = [initial_player]
-        self.conditions = {'mode': 'single',
-                           'players': str(4),
-                           'map': 'default',
+        self.conditions = {'type': 'wizard',
+                           'scenario': 'free',
+                           'players': 4,
+                           'map': 'classic',
                            'state': 'desicion',
-                           'merge': str(self.id)}
+                           'merge': self.id
+                           }
 
         self.players[0].set_session(self)
 

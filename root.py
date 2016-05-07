@@ -1,5 +1,4 @@
-from subprocess import Popen
-import logging, players, wizard,os
+import logging, players, wizard,session
 
 class Core:
     '''
@@ -34,13 +33,16 @@ class Core:
         logging.debug('Core connections are established')
         return None
 
-    def start_session(self,wizard):
+    def start_session(self,wiz):
         '''
         (Wizard) -> None
 
-        Creates session upon passed wizrd parameters.
+        Creates session upon passed wizard parameters.
         '''
-        pass
+        new_session = session.Session(wiz)
+
+        self.sessions.append(new_session)
+        return None
 
     def add_player(self, id):
         '''
@@ -97,13 +99,17 @@ class Core:
 
         # When player(s) ready to start session - remaining player slots are
         # filled with bots.
-        elif int(wiz.conditions['players']) > len(wiz.players):
+        elif wiz.conditions['players'] > len(wiz.players):
             for i in range(0,int(wiz.conditions['players']) > len(wiz.players)):
                 new_ai = self.db.get_free_ai()
                 if new_ai and not find_bot_in_task_list(new_ai['id']):
                     new_ai['type'] = 'add_bot'
                     new_ai['merge'] = wiz.id
                     self.elder_tasks.append(new_ai)
+
+        #
+        else:
+            self.start_session(wiz)
 
         return None
 
