@@ -62,15 +62,14 @@ class Elder:
         for bot in self.bot_processes:
             if self.bot_processes[bot].poll() != None:
                 rm_lst.append(bot)
-        if rm_lst:
-            map(self.bot_processes.pop, rm_lst)
+        for bot_id in rm_lst:
+            del self.bot_processes[bot_id]
 
     def process_task(self, task_list):
         #print('processing tasks' + str(task_list))
         for task in task_list:
             if task['type'] == 'add_bot' and task['id'] not in self.bot_processes:
                 self._create_bot(task)
-                time.sleep(1)
         pass
 
 
@@ -89,7 +88,7 @@ def main():
         processing_time = time.time() - start_time
         if processing_time < elder.periods['core_update'] / 1000:
             time.sleep(elder.periods['core_update'] / 1000 - processing_time)
-        print('Subprocesses amount: '+ str(len(elder.bot_processes)))
+        #print('Subprocesses amount: '+ str(len(elder.bot_processes)))
 
 
 if __name__ == '__main__':

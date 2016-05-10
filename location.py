@@ -7,6 +7,6 @@ class Session:
         Initial class creation. .
         '''
         self.name = name
-        self.type = 'standard' #Standard/quest/event
+        self.type = 'standard' #Standard/private/quest/event
         self.description = ''
-        self.slots = [None]
+        self.slots = []

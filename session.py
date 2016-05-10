@@ -19,7 +19,7 @@ class Session:
         for player in self.players:
             player.set_session(self)
 
-        return True
+        return None
 
     def set_status(self, player_id):
         pass
