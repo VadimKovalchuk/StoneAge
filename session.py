@@ -23,3 +23,6 @@ class Session:
 
     def set_status(self, player_id):
         pass
+
+    def status(self):
+        return 'session'

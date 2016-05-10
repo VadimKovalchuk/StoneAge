@@ -23,7 +23,7 @@ class Elder:
         Initial class creation. Without connection to infrastructure.
         '''
         self.core_session = None
-        self.bot_processes = []  # Running bot processes
+        self.bot_processes = {}  # Running bot processes
         self.requests = []  # Requests that sent by Core
         self.periods = {'core_update': 1000,
                         'process_creation': 1000,
@@ -44,7 +44,7 @@ class Elder:
             assert True, "Unsupported system detected"
         #print(args)
         bot = subprocess.Popen(args,shell=True)
-        self.bot_processes.append(bot)
+        self.bot_processes[credent_dict['id']] = bot
 
         return None
 
@@ -56,15 +56,23 @@ class Elder:
         assert response['id'] != '1', 'Invalid ID is rescieved for connect request'
         return response
 
+    def maintain_bots(self):
+
+        rm_lst = []
+        for bot in self.bot_processes:
+            if self.bot_processes[bot].poll() != None:
+                rm_lst.append(bot)
+        if rm_lst:
+            map(self.bot_processes.pop, rm_lst)
+
     def process_task(self, task_list):
         #print('processing tasks' + str(task_list))
         for task in task_list:
-            if task['type'] == 'add_bot':
+            if task['type'] == 'add_bot' and task['id'] not in self.bot_processes:
                 self._create_bot(task)
                 time.sleep(1)
-
-
         pass
+
 
 
 def main():
@@ -77,9 +85,11 @@ def main():
         responce = elder.update_core()
         if 'result' in responce and responce['result']:
             elder.process_task(responce['result'])
+        elder.maintain_bots()
         processing_time = time.time() - start_time
         if processing_time < elder.periods['core_update'] / 1000:
             time.sleep(elder.periods['core_update'] / 1000 - processing_time)
+        print('Subprocesses amount: '+ str(len(elder.bot_processes)))
 
 
 if __name__ == '__main__':
