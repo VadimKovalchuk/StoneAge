@@ -1,19 +1,20 @@
 class Session:
 
-    def __init__(self, wzrd):
+    def __init__(self, wzrd, db):
         '''
-        (list) -> None
+        (list, Database) -> None
 
         Initial class creation. Gets parameters and players from wizard.
         Makes self as the players session.
         '''
         self.id = wzrd.id
+        self.db = db
         self.players = wzrd.players
         self.rules = None       # TBD
         self.map = []           # TBD
         self.scenario = None    # TBD
         self.phase = 'allocation'  # Allocation/Day/Evening/Night
-        self.log = {player: [] for player in self.players}  # Game events
+        self.log = {player.id: [] for player in self.players}  # Game events
                                             # that will be show to player
 
         for player in self.players:

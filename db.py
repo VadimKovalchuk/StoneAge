@@ -48,11 +48,17 @@ class Database:
         self.db_cursor.execute(query)
         rows = self.db_cursor.fetchall()
         for row in rows:
-            #bot_id, login, pas = row
             bot_id = row[0]
-            login = row[1]
-            pas = row[2]
             if not self.core.get_instance_by_player(bot_id):
-                return {'id':bot_id,'login': login, 'pass': pas}
+                return {'id':bot_id,'login': row[1], 'pass': row[2]}
 
         return False
+
+    def location_data(self,name):
+        '''
+
+        '''
+        query = 'SELECT type,desription,slots,rule,full_fill FROM locations WHERE name is "' + name +'"'
+        self.db_cursor.execute(query)
+        row = self.db_cursor.fetchone()
+        return {'type': row[0], 'desription':row[1],'slots':[2],'rule':row[3],'full_fill':[4]}

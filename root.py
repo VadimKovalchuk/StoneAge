@@ -35,11 +35,11 @@ class Core:
 
     def start_session(self,wiz):
         '''
-        (Wizard) -> None
+        (Wizard, Database) -> None
 
         Creates session upon passed wizard parameters.
         '''
-        new_session = session.Session(wiz)
+        new_session = session.Session(wiz, self.db)
 
         self.sessions.append(new_session)
         return None
