@@ -81,7 +81,12 @@ def main():
     logging.info('Build infrastructure connections')
     while True:
         start_time = time.time()
-        responce = elder.update_core()
+        try:
+            responce = elder.update_core()
+        except:
+            print('Server in not responding')
+            time.sleep(5)
+            continue
         if 'result' in responce and responce['result']:
             elder.process_task(responce['result'])
         elder.maintain_bots()

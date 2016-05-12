@@ -16,4 +16,5 @@ class Location:
     def status(self):
         status = {'name':self.name,
                   'slots':self.slots}
+        return status
 

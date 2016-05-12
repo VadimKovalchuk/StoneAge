@@ -14,13 +14,14 @@ class Scenario:
         self.db = db
 
         self.raw_map = {'forest':{}, 'stone':{}, 'clay':{}, 'hunting grounds':{},
-                    'mother goddess':{},'farm':{},'public workshop':{}}
+                    'mother goddess':{},'public workshop':{}}
         self._create_map()
 
     def _create_map(self):
-        for location in self.raw_map:
-            location_data =  self.db.location_data(location)
-            location_data.update(self.raw_map[location])
+        for location_name in self.raw_map:
+            location_data =  self.db.location_data(location_name)
+            location_data.update(self.raw_map[location_name])
+            location_data['name'] = location_name
             location_class = location.Location(location_data)
             self.session.map.append(location_class)
 

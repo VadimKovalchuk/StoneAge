@@ -40,8 +40,8 @@ class Core:
         Creates session upon passed wizard parameters.
         '''
         new_session = session.Session(wiz, self.db)
-
         self.sessions.append(new_session)
+        self.wizards.remove(wiz)
         return None
 
     def add_player(self, id):

@@ -13,7 +13,7 @@ class Session:
         self.db = db
         self.players = wzrd.players
         self.rules = None       # TBD
-        self.map = []           # TBD
+        self.map = []
         self.scenario = scenario.Scenario(wzrd.conditions['scenario'],self,self.db)
         self.phase = 'allocation'  # Allocation/Day/Evening/Night
         self.log = {player.id: [] for player in self.players}  # Game events
@@ -30,7 +30,7 @@ class Session:
 
 
     def status(self):
-        status = {'map':{}}
+        status = {'phase': self.phase,'map':{}}
         for location in self.map:
-            status[map][location.name] = location.status()
+            status['map'][location.name] = location.status()
         return status
