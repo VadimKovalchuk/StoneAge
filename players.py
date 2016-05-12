@@ -1,4 +1,4 @@
-class player:
+class Player:
 
     def __init__(self, id):
         '''
@@ -10,11 +10,19 @@ class player:
         self.session = None # Session/Wizard that player is connected to
         self.population = []
         self.resources = []
-        self.skills = []
-        self.infra = None   # Locations inside tribe territory and their state
+        self.skills = {}
+        self.infra = []   # Locations inside tribe territory and their state
         self.farm = []      # Tribe farm fields
 
         return None
 
     def set_session(self, session):
         self.session = session
+
+    def data(self):
+        return {'population':[man.status() for man in self.population],
+                'resources':self.resources,
+                'skills':self.skills,
+                'infra':self.infra,
+                'farm':self.farm
+                }

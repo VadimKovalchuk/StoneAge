@@ -60,6 +60,13 @@ class Gate:
                                                   "instance expected")
             return False
 
+    def player_data(self,player_id):
+        for player in self.core.players:
+            if player.id == int(player_id):
+                return player.data()
+        else:
+            return False
+
     def allocation_command(self,strin):
         curent_session = self.core.get_session_by_player(id)
         if type(curent_session) != type(session.session):
@@ -75,6 +82,7 @@ class Gate:
         dispatcher["connect"] = self.player_connect
         dispatcher["status"] = self.status
         dispatcher["wizard_conditions"] = self.wizard_conditions
+        dispatcher["player_data"] = self.player_data
         dispatcher["allocate"] = self.allocation_command
 
 

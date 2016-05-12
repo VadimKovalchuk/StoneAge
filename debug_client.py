@@ -6,7 +6,8 @@ url = "http://localhost:4000/jsonrpc"
 headers = {'content-type': 'application/json'}
 command_args = {'connect':['login', 'password'],
                 'status':[],
-                'wizard_conditions':['new_conditions_dict']}
+                'wizard_conditions':[],
+                'player_data':['player_id']}
 
 
 

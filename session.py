@@ -21,7 +21,7 @@ class Session:
 
         for player in self.players:
             player.set_session(self)
-
+        self.scenario.initial_setup()
 
         return None
 
@@ -30,7 +30,7 @@ class Session:
 
 
     def status(self):
-        status = {'phase': self.phase,'map':{}}
+        status = {'phase': self.phase,'map':[]}
         for location in self.map:
-            status['map'][location.name] = location.status()
+            status['map'].append(location.status())
         return status
