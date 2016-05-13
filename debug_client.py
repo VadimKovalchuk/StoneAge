@@ -1,4 +1,4 @@
-import requests, json
+import requests, json, client
 
 player = None
 
@@ -6,27 +6,9 @@ url = "http://localhost:4000/jsonrpc"
 headers = {'content-type': 'application/json'}
 command_args = {'login':['login', 'password'],
                 'status':[],
-                'wizard_conditions':[],
+                'merge_wizard':['destination'],
                 'player_data':['player_id']}
 
-
-
-def send_request(method,params,id):
-    '''
-
-    '''
-    payload = {
-            "method": method,
-            "params": params,
-            "jsonrpc": "2.0",
-            "id": id,
-        }
-    response = requests.post(url,
-                             data=json.dumps(payload),
-                             headers=headers).json()
-    assert response['id'] != str(id), 'Invalid ID is rescieved for connect request'
-
-    return response
 
 def get_command_arguments(name):
     '''
@@ -48,11 +30,9 @@ def login_flow():
     '''
 
     '''
-    response = None
-
     for attempt in range(1,4):
         args = get_command_arguments('login')
-        response = send_request('connect',args,0)
+        response = client.send_request('connect',args,0)
         assert response['id'] != str(0), 'Invalid ID is rescieved for connect request'
         if('result' in response):
             id = response['result']['id']
@@ -65,28 +45,16 @@ def update_wizard(player_id):
 
     '''
     args = {'new_conditions':{'merge': '1000', 'state': 'ready'}}
-    print(send_request('wizard_conditions',args,player_id))
-
-command_flows = {'connect': login_flow,
-                 'wizard_conditions':update_wizard}
-
-def print_responce(responce):
-    if 'result' in responce:
-        for block in responce['result']:
-            print(block,"\n\t", responce['result'][block])
-    else:
-        print("Responce has failed\n",responce)
+    print(client.send_request('wizard_conditions',args,player_id))
 
 def main():
 
-    player_id = None
+    player_id = login_flow()
 
     command_list =[key for key in command_args]
 
 
     while True:
-        if not player_id:
-            player_id = login_flow()
         print('\nCommand list')
 
         for i in range(0, len(command_list)):
@@ -98,10 +66,12 @@ def main():
         cmd = command_list[cmd_id]
         args = get_command_arguments(cmd)
 
-        if cmd in command_flows:
-            print_responce(command_flows[cmd](player_id))
+        if cmd == 'login':
+            client.print_responce(login_flow())
+        elif cmd == 'merge_wizard':
+            client.merge_wizard(player_id,args['destination'])
         else:
-            print_responce(send_request(cmd,args,player_id))
+            client.print_responce(client.send_request(cmd,args,player_id))
 
 
 if __name__ == "__main__":
