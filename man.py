@@ -15,3 +15,6 @@ class Man:
 
     def status(self):
         return self.__dict__
+
+    def map_status(self):
+        return {'name':self.name,'player':self.player}

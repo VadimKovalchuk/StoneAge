@@ -4,7 +4,7 @@ player = None
 
 url = "http://localhost:4000/jsonrpc"
 headers = {'content-type': 'application/json'}
-command_args = {'connect':['login', 'password'],
+command_args = {'login':['login', 'password'],
                 'status':[],
                 'wizard_conditions':[],
                 'player_data':['player_id']}
@@ -51,7 +51,7 @@ def login_flow():
     response = None
 
     for attempt in range(1,4):
-        args = get_command_arguments('connect')
+        args = get_command_arguments('login')
         response = send_request('connect',args,0)
         assert response['id'] != str(0), 'Invalid ID is rescieved for connect request'
         if('result' in response):
@@ -69,6 +69,13 @@ def update_wizard(player_id):
 
 command_flows = {'connect': login_flow,
                  'wizard_conditions':update_wizard}
+
+def print_responce(responce):
+    if 'result' in responce:
+        for block in responce['result']:
+            print(block,"\n\t", responce['result'][block])
+    else:
+        print("Responce has failed\n",responce)
 
 def main():
 
@@ -92,9 +99,9 @@ def main():
         args = get_command_arguments(cmd)
 
         if cmd in command_flows:
-            print(command_flows[cmd](player_id))
+            print_responce(command_flows[cmd](player_id))
         else:
-            print(send_request(cmd,args,player_id))
+            print_responce(send_request(cmd,args,player_id))
 
 
 if __name__ == "__main__":

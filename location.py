@@ -15,6 +15,8 @@ class Location:
 
     def status(self):
         status = {'name':self.name,
-                  'slots':self.slots}
+                  'slots':[]}
+        for man in self.slots:
+            if man:
+                status['slots'].append(man.map_status())
         return status
-

@@ -23,6 +23,6 @@ class Player:
         return {'population':[man.status() for man in self.population],
                 'resources':self.resources,
                 'skills':self.skills,
-                'infra':self.infra,
-                'farm':self.farm
+                'infra':[location.status() for location in self.infra],
+                'farm':[farm.status() for farm in self.farm]
                 }
