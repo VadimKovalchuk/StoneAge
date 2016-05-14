@@ -2,6 +2,9 @@ import location, man
 
 start_pop_amount = 5
 
+names = ["Oku", "Buba", "Cora", "Garu", "Okupa", "Timb", "Dema", "Hala",
+                 "Kibo", "Moz", "Zev", "Aka", "Lem", "Nurg", "Pela"]
+
 class Scenario:
 
     def __init__(self, name, session, db):
@@ -40,7 +43,7 @@ class Scenario:
 
         '''
         for player in self.session.players:
-            player.population = [man.Man(player.id)
+            player.population = [man.Man(player.id,names[i]) \
                                  for i in range(start_pop_amount)]
         return None
 

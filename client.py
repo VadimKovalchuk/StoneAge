@@ -31,8 +31,26 @@ def merge_wizard(player_id, destination):
     return None
 
 def print_responce(responce):
+
+    def output_data(data,recursion_depth):
+
+        if type(data) == type({}):
+            print("+",end='')
+            for block in data:
+                print("\t"*recursion_depth,block)
+                output_data(data[block],recursion_depth+1)
+        elif type(data) == type([]):
+            for block in data:
+                output_data(block,recursion_depth+1)
+        else:
+            print("\t"*recursion_depth,data)
+
+
+
     if 'result' in responce:
-        if type(responce['result']) == type(bool):
+        output_data(responce['result'],0)
+        return None
+        if type(responce['result']) not in (type(dict),type(list)):
             print(responce['result'])
             return None
         for block in responce['result']:

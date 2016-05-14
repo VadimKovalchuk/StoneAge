@@ -40,13 +40,6 @@ def login_flow():
         print('Attempt',attempt,'failed.')
     print('Login failed!')
 
-def update_wizard(player_id):
-    '''
-
-    '''
-    args = {'new_conditions':{'merge': '1000', 'state': 'ready'}}
-    print(client.send_request('wizard_conditions',args,player_id))
-
 def main():
 
     player_id = login_flow()

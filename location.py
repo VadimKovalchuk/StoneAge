@@ -9,9 +9,20 @@ class Location:
         self.name = location_data['name']
         self.type = location_data['type'] #Standard/private/quest/event
         self.description = location_data['description']
+        self.full_fill = True if location_data['full_fill'] == 1 else False
         self.slots = [None for i in range(location_data['slots'])]
 
-        return None
+
+    def allocate_man(self,man):
+        '''
+
+        '''
+        for i in range(len(self.slots)):
+            if self.slots[i] is None:
+                self.slots[i] = man
+                return True
+        return False
+
 
     def status(self):
         status = {'name':self.name,
@@ -19,4 +30,6 @@ class Location:
         for man in self.slots:
             if man:
                 status['slots'].append(man.map_status())
+            else:
+                status['slots'].append(None)
         return status

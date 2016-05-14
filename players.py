@@ -11,13 +11,33 @@ class Player:
         self.population = []
         self.resources = []
         self.skills = {}
-        self.infra = []   # Locations inside tribe territory and their state
+        self.infra = []     # Locations inside tribe territory and their state
         self.farm = []      # Tribe farm fields
+        self.idle_turns = 0 # Number of turns that player was idle
+                            # during allocation phase
 
         return None
 
     def set_session(self, session):
         self.session = session
+
+    def get_man_by_name(self, name):
+        '''
+
+        '''
+        for man in self.population:
+            if name == man.name:
+                return man
+        return False
+
+    def is_all_allocated(self):
+        '''
+
+        '''
+        for man in self.population:
+            if not man.is_allocated:
+                return False
+        return True
 
     def data(self):
         return {'population':[man.status() for man in self.population],
