@@ -12,11 +12,23 @@ class Location:
         self.full_fill = True if location_data['full_fill'] == 1 else False
         self.slots = [None for i in range(location_data['slots'])]
 
+    def free_slots_amount(self):
+        '''
+
+        '''
+        slots = 0
+        for slot in self.slots:
+            if slot is None:
+                slots += 1
+        return slots
+
 
     def allocate_man(self,man):
         '''
 
         '''
+        if man.is_allocated:
+            return False
         for i in range(len(self.slots)):
             if self.slots[i] is None:
                 self.slots[i] = man

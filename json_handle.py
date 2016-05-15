@@ -67,12 +67,13 @@ class Gate:
         else:
             return False
 
-    def allocation_command(self,strin):
-        curent_session = self.core.get_session_by_player(id)
-        if type(curent_session) != type(session.session):
+    def allocation_command(self,location, men):
+        player_id = int(self.request["id"])
+        curent_session = self.core.get_instance_by_player(player_id)
+        if 'Session' not in str(type(curent_session)):
             return False
+        return curent_session.allocation(player_id, location, men)
 
-        return True
 
     @Request.application
     def application(self,request):
@@ -83,12 +84,13 @@ class Gate:
         dispatcher["status"] = self.status
         dispatcher["wizard_conditions"] = self.wizard_conditions
         dispatcher["player_data"] = self.player_data
-        dispatcher["allocate"] = self.allocation_command
+        dispatcher["allocation"] = self.allocation_command
 
 
         response = JSONRPCResponseManager.handle(
             request.data, dispatcher)
-        print(request.data,'\n',response.data)
+        if response.data['id'] != 1:
+            print(request.data,'\n',response.data)
         return Response(response.json, mimetype='application/json')
 
 

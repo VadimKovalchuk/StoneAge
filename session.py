@@ -57,16 +57,6 @@ class Session:
                 return location
         return False
 
-    def _location_free_slots(self, location):
-        '''
-
-        '''
-        slots = 0
-        for slot in location.slots:
-            if slot:
-                slots += 1
-        return slots
-
     def _next_player_turn(self):
         '''
 
@@ -86,31 +76,29 @@ class Session:
         return True
 
 
-    def allocation(self, command):
+    def allocation(self, player_id, location_name, men):
 
-        if 'id' not in command or \
-           'location' not in command or \
-           'men' not in command:
-            return False
-        location = self._get_location(command['location'])
+        location = self._get_location(location_name, player_id)
         if not location:
             return False
-        if location['type'] == 'standard' and \
-           command['id'] != self.player_turn.id:
+        if location.type == 'standard' and \
+           player_id != self.player_turn.id:
             return False
-        if self._location_free_slots(location) < len(command['men']):
+        if location.free_slots_amount() < len(men):
             return False
         if location.full_fill is True and \
-            self._location_free_slots(location) != len(command['men']):
+            location.free_slots_amount() != len(men):
             return False
-        player = self._get_player(command['id'])
-        for name in command['men']:
+        player = self._get_player(player_id)
+        for name in men:
             man = player.get_man_by_name(name)
             if not man:
                 return False
             if location.allocate_man(man):
                 man.is_allocated = True
-        if command['id'] == self.player_turn.id:
+            else:
+                return False
+        if player_id == self.player_turn.id:
             self._next_player_turn()
 
         return True
@@ -119,7 +107,8 @@ class Session:
 
 
     def status(self):
-        status = {'phase': self.phase,
+        status = {'type': 'session',
+                  'phase': self.phase,
                   'player_turn': self.player_turn.id,
                   'map':[]}
         for location in self.map:

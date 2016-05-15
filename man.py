@@ -13,17 +13,6 @@ class Man:
 
         return None
 
-    def client_json(self,dict):
-        '''
-
-        '''
-        self.alive = dict['alive']
-        self.is_allocated = dict['is_allocated']
-        self.points = dict['points']
-        self.weapon = dict['weapon']
-        self.wear = dict['wear']
-        self.inventory = dict['inventory']
-
     def status(self):
         return self.__dict__
 

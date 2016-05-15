@@ -1,4 +1,4 @@
-import requests, json
+import requests, json , man
 
 url = "http://localhost:4000/jsonrpc"
 headers = {'content-type': 'application/json'}
@@ -57,3 +57,28 @@ def print_responce(responce):
             print(block,"\n\t", responce['result'][block])
     else:
         print("Responce has failed\n",responce)
+
+def deserialize_player_data(player,json_responce):
+    '''
+
+    '''
+    player.population = []
+    for man_data in json_responce['population']:
+        man_class = man.Man(player.id,man_data['name'])
+        deserialize_man_data(man_class,man_data)
+        player.population.append(man_class)
+
+    return None
+
+def deserialize_man_data(man_class, data):
+    '''
+
+    '''
+    man_class.alive = data['alive']
+    man_class.is_allocated = data['is_allocated']
+    man_class.points = data['points']
+    man_class.weapon = data['weapon']
+    man_class.wear = data['wear']
+    man_class.inventory = data['inventory']
+
+    return None

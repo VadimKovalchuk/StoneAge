@@ -1,13 +1,14 @@
-import requests, json, client
+import requests, json, client, players
 
-player = None
+
 
 url = "http://localhost:4000/jsonrpc"
 headers = {'content-type': 'application/json'}
 command_args = {'login':['login', 'password'],
                 'status':[],
                 'merge_wizard':['destination'],
-                'player_data':['player_id']}
+                'player_data':['player_id'],
+                'allocation':[]}
 
 
 def get_command_arguments(name):
@@ -40,9 +41,34 @@ def login_flow():
         print('Attempt',attempt,'failed.')
     print('Login failed!')
 
+    return None
+
+def allocation(player):
+    men = []
+    print('location: ',end='')
+    location = input()
+
+    for a in range(10):
+        for i in range(len(player.population)):
+            if player.population[i].is_allocated:
+                continue
+            print(i,' - ' ,player.population[i].name,player.population[i].points)
+        print('Selected',men)
+        print('name number to add: ',end='')
+        inp = input()
+        if inp == '':
+            break
+        else:
+            man = player.population[int(inp)]
+            men.append(man.name)
+            man.is_allocated = True
+
+    args = {'location': location, 'men': men}
+    return client.send_request('allocation',args,player.id)
+
 def main():
 
-    player_id = login_flow()
+    player = players.Player(login_flow())
 
     command_list =[key for key in command_args]
 
@@ -53,7 +79,7 @@ def main():
         for i in range(0, len(command_list)):
             print(i,' - ', command_list[i])
 
-        print('\n(',player_id,')Seclect command: ',end='')
+        print('\n(',player.id,')Seclect command: ',end='')
         user_input = input()
         cmd_id = int(user_input)
         cmd = command_list[cmd_id]
@@ -62,9 +88,16 @@ def main():
         if cmd == 'login':
             client.print_responce(login_flow())
         elif cmd == 'merge_wizard':
-            client.merge_wizard(player_id,args['destination'])
+            client.merge_wizard(player.id,args['destination'])
+        elif cmd == 'allocation':
+            args = {'player_id':player.id}
+            responce = client.send_request('player_data',args,player.id)
+            player_data = responce['result']
+            client.deserialize_player_data(player,player_data)
+            #print(player.data())
+            client.print_responce(allocation(player))
         else:
-            client.print_responce(client.send_request(cmd,args,player_id))
+            client.print_responce(client.send_request(cmd,args,player.id))
 
 
 if __name__ == "__main__":
