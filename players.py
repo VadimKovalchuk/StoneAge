@@ -30,14 +30,15 @@ class Player:
                 return man
         return False
 
-    def is_all_allocated(self):
+    def free_men(self):
         '''
 
         '''
+        free_men = 0
         for man in self.population:
             if not man.is_allocated:
-                return False
-        return True
+                free_men += 1
+        return free_men
 
     def data(self):
         return {'population':[man.status() for man in self.population],

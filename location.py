@@ -10,6 +10,7 @@ class Location:
         self.type = location_data['type'] #Standard/private/quest/event
         self.description = location_data['description']
         self.full_fill = True if location_data['full_fill'] == 1 else False
+        self.infinite_slots = True if location_data['infinite_slots'] == 1 else False
         self.slots = [None for i in range(location_data['slots'])]
 
     def free_slots_amount(self):

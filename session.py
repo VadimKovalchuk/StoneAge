@@ -67,11 +67,18 @@ class Session:
             self.player_turn = self.players[0]
         else:
             self.player_turn = self.players[player_index]
+
+        for location in self.map:
+            if location.infinite_slots:
+                free_men = self.player_turn.free_men()
+                free_slots = location.free_slots_amount()
+                if free_men > free_slots:
+                    location.slots.extend([None for i in range(free_men - free_slots)])
         return None
 
     def _all_players_done(self):
         for player in self.players:
-            if not player.is_all_allocated():
+            if player.free_men():
                 return False
         return True
 
@@ -103,7 +110,9 @@ class Session:
 
         return True
 
+    def update(self):
 
+        return None
 
 
     def status(self):

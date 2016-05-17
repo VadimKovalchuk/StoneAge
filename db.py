@@ -58,7 +58,9 @@ class Database:
         '''
 
         '''
-        query = 'SELECT type,description,slots,full_fill FROM locations WHERE name is "' + name +'"'
+        query = 'SELECT type,description,slots,full_fill,infinite_slots ' \
+                'FROM locations WHERE name is "' + name +'"'
         self.db_cursor.execute(query)
         row = self.db_cursor.fetchone()
-        return {'type': row[0], 'description':row[1],'slots':row[2],'full_fill':row[3]}
+        return {'type': row[0], 'description':row[1],'slots':row[2],
+                'full_fill':row[3],'infinite_slots':row[4]}
