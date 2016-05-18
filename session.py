@@ -4,10 +4,12 @@ class Session:
 
     def __init__(self, wzrd, db):
         '''
-        (list, Database) -> None
+        (Wizard, Database) -> None
 
-        Initial class creation. Gets parameters and players from wizard.
-        Makes self as the players session.
+        Initial class creation:
+            - Creates supporting Scenario class with initial session parameters
+            - Gets parameters and players from wizard.
+            - Makes self as the players session.
         '''
         self.id = wzrd.id
         self.db = db
@@ -32,7 +34,10 @@ class Session:
 
     def _get_player(self,player_id):
         '''
+        (int) -> Player
 
+        Returns Player class from session players list
+        that corresponds to passed ID.
         '''
         for player in self.players:
             if player.id == player_id:
@@ -40,7 +45,13 @@ class Session:
         return None
 
     def _get_location(self,location_name,player_id):
+        '''
+        (str,int) -> Location
 
+        Returns Location instance that corresponds to location name.
+        Location is looked for in Session map list. If not found than in
+        Player infra locations. Pleayer is defined by passed player ID.
+        '''
         for location in self.map:
             if location.name == location_name:
                 return location
@@ -59,7 +70,11 @@ class Session:
 
     def _next_player_turn(self):
         '''
+        (None) -> None
 
+        Switches active player to next player in session players list.
+        Increases amount of free slots in locations with endless allocation
+        possibilities(e.g. Hunting grounds)
         '''
         player_index = self.players.index(self.player_turn)
         player_index += 1
@@ -77,6 +92,12 @@ class Session:
         return None
 
     def _all_players_done(self):
+        '''
+        (None) -> Bool
+
+        Verifies if all players that belongs to this session does not have
+        unallocated men.
+        '''
         for player in self.players:
             if player.free_men():
                 return False
@@ -84,18 +105,29 @@ class Session:
 
 
     def allocation(self, player_id, location_name, men):
+        '''
+        (int, str, list of str) -> Bool
 
+
+        '''
         location = self._get_location(location_name, player_id)
         if not location:
             return False
+
+        # Allocation within other players turn is allowed only
+        # to internal locations
         if location.type == 'standard' and \
            player_id != self.player_turn.id:
             return False
+
+        # Input validation to Game Logic Rules
         if location.free_slots_amount() < len(men):
             return False
         if location.full_fill is True and \
             location.free_slots_amount() != len(men):
             return False
+
+        # Allocating men to passed location
         player = self._get_player(player_id)
         for name in men:
             man = player.get_man_by_name(name)
@@ -105,17 +137,33 @@ class Session:
                 man.is_allocated = True
             else:
                 return False
+
+        # Switch turn to next player in case if current move where belong
+        # passed player.
         if player_id == self.player_turn.id:
             self._next_player_turn()
 
         return True
 
     def update(self):
+        '''
+        (None) -> None
 
+        Activates session events that cannot be triggered by user input events.
+        (e.g. Player turn timeout)
+        '''
+        if self.phase == 'allocation' and self._all_players_done():
+            self.phase = 'day'
         return None
 
 
     def status(self):
+        '''
+        (None) -> Dict
+
+        Full session data that includes: instance type, game phase,
+        active player, all location with their parameters, TBD
+        '''
         status = {'type': 'session',
                   'phase': self.phase,
                   'player_turn': self.player_turn.id,

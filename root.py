@@ -123,11 +123,10 @@ class Core:
         for wiz in self.wizards:
             if wiz.conditions['state'] == 'ready':
                 self.update_wizard(wiz)
-        pass
-        '''
+
         for session in self.sessions:
-            pass
-        '''
+            session.update()
+
         for request in self.elder_tasks:
             if request['type'] == 'add_bot' and self.get_instance_by_player(request['id']):
                 self.elder_tasks.remove(request)
