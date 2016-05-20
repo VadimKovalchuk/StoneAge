@@ -1,6 +1,6 @@
 class Man:
 
-    def __init__(self, player_id, name = ''):
+    def __init__(self, player_id, name=''):
 
         self.player = player_id
         self.alive = True

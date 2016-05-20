@@ -9,7 +9,7 @@ class Player:
         self.id = id
         self.session = None # Session/Wizard that player is connected to
         self.population = []
-        self.resources = []
+        self.stock = []
         self.skills = {}
         self.infra = []     # Locations inside tribe territory and their state
         self.farm = []      # Tribe farm fields
@@ -42,7 +42,7 @@ class Player:
 
     def data(self):
         return {'population':[man.status() for man in self.population],
-                'resources':self.resources,
+                'resources':self.stock,
                 'skills':self.skills,
                 'infra':[location.status() for location in self.infra],
                 'farm':[farm.status() for farm in self.farm]

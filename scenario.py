@@ -31,7 +31,7 @@ class Scenario:
                    }
 
         for location_name in raw_map:
-            location_data =  self.db.location_data(location_name)
+            location_data = self.db.location(location_name)
             location_data.update(raw_map[location_name])
             location_data['name'] = location_name
             location_class = location.Location(location_data)
@@ -47,7 +47,7 @@ class Scenario:
                                  for i in range(start_pop_amount)]
         return None
 
-    def _initial_infra(self):
+    def _starting_infra(self):
         '''
 
         '''
@@ -55,7 +55,7 @@ class Scenario:
                      'farm':{}}
         for player in self.session.players:
             for location_name in raw_infra:
-                location_data =  self.db.location_data(location_name)
+                location_data = self.db.location(location_name)
                 location_data.update(raw_infra[location_name])
                 location_data['name'] = location_name
                 location_class = location.Location(location_data)
@@ -66,13 +66,25 @@ class Scenario:
 
         return None
 
+    def _starting_inventory(self):
+        '''
+        (None) -> None
+
+        Defines amount of items and resources that players should start with
+        '''
+        for player in self.session.players:
+            player.stock.append(self.db.item(1))
+
+        return None
+
     def initial_setup(self):
         '''
 
         '''
         self._create_map()
         self._starting_population()
-        self._initial_infra()
+        self._starting_infra()
+        self._starting_inventory()
 
         return None
 

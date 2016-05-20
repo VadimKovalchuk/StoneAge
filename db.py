@@ -54,7 +54,7 @@ class Database:
 
         return False
 
-    def location_data(self,name):
+    def location(self, name):
         '''
 
         '''
@@ -64,3 +64,34 @@ class Database:
         row = self.db_cursor.fetchone()
         return {'type': row[0], 'description':row[1],'slots':row[2],
                 'full_fill':row[3],'infinite_slots':row[4]}
+
+    def item(self, item_id=None, name=None):
+        '''
+        (int,str) -> dict
+
+        Returns item data by passed id or name.
+        '''
+        if not (item_id or name):
+            return False
+        search_param = 'id' if item_id else 'name'
+        search_value = item_id if item_id else name
+        param_names = ['id', 'item_type', 'name', 'expiry_term', 'modifier']
+
+        query = 'SELECT ' + ', '.join(param_names) + ' FROM items WHERE ' + search_param + ' is "' + str(search_value) +'"'
+        print(query)
+        self.db_cursor.execute(query)
+        param_values = self.db_cursor.fetchone()
+
+        result = {}
+        for i in range(len(param_names)):
+            result[param_names[i]] = param_values[i]
+        return result
+
+
+if __name__ == '__main__':
+    db = Database()
+    print(db.item(1))
+    print(db.item(item_id=2))
+    print(db.item(name='bone'))
+
+
