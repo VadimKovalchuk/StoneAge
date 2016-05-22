@@ -1,4 +1,4 @@
-import location, man
+import location, man, items
 
 start_pop_amount = 5
 
@@ -73,7 +73,9 @@ class Scenario:
         Defines amount of items and resources that players should start with
         '''
         for player in self.session.players:
-            player.stock.append(self.db.item(1))
+            for item in range(1,8):
+                for n in range((8-item) * 2):
+                    player.stock.append(items.Item(self.db.item(item)))
 
         return None
 

@@ -78,7 +78,7 @@ class Database:
         param_names = ['id', 'item_type', 'name', 'expiry_term', 'modifier']
 
         query = 'SELECT ' + ', '.join(param_names) + ' FROM items WHERE ' + search_param + ' is "' + str(search_value) +'"'
-        print(query)
+        #print(query)
         self.db_cursor.execute(query)
         param_values = self.db_cursor.fetchone()
 

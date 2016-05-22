@@ -44,11 +44,28 @@ def login_flow():
     return None
 
 def allocation(player):
-    men = []
-    print('location: ',end='')
-    location = input()
 
-    for a in range(10):
+    def free_slots(slots_lst):
+        count = 0
+        for i in range(len(slots_lst)):
+            if slots_lst[i] is None:
+                count += 1
+        return count
+
+    men = []
+    responce = client.send_request('status',[],player.id)
+    map_lst = responce['result']['map']
+    for i in range(len(map_lst)):
+        free = free_slots(map_lst[i]['slots'])
+        if free:
+            print(i, ' - ', map_lst[i]['name'], ': ', free)
+
+    print('location: ',end='')
+    location_index = int(input())
+    location_name = map_lst[location_index]['name']
+    man_limit = free_slots(map_lst[i]['slots'])
+
+    for a in range(man_limit):
         for i in range(len(player.population)):
             if player.population[i].is_allocated:
                 continue
@@ -63,7 +80,7 @@ def allocation(player):
             men.append(man.name)
             man.is_allocated = True
 
-    args = {'location': location, 'men': men}
+    args = {'location': location_name, 'men': men}
     return client.send_request('allocation',args,player.id)
 
 def main():
