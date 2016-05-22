@@ -89,7 +89,7 @@ class Gate:
 
         response = JSONRPCResponseManager.handle(
             request.data, dispatcher)
-        if response.data['id'] != 1:
+        if response.data['id'] != 1 and 'result' not in response.data:
             print(request.data,'\n',response.data)
         return Response(response.json, mimetype='application/json')
 

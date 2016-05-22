@@ -1,4 +1,4 @@
-import scenario, time
+import time, scenario, rules
 
 class Session:
 
@@ -14,7 +14,7 @@ class Session:
         self.id = wzrd.id
         self.db = db
         self.players = wzrd.players
-        self.rules = None       # TBD
+        self.rules = rules.Rules(self)
         self.map = []
         self.scenario = scenario.Scenario(wzrd.conditions['scenario'],self,self.db)
         self.phase = 'allocation'  # Allocation/Day/Evening/Night
@@ -152,8 +152,12 @@ class Session:
         Activates session events that cannot be triggered by user input events.
         (e.g. Player turn timeout)
         '''
-        if self.phase == 'allocation' and self._all_players_done():
-            self.phase = 'day'
+        if self.phase == 'allocation':
+            if self._all_players_done():
+                self.phase = 'day'
+                print(self.rules.process_day_phase())
+            elif not self.player_turn.free_men():
+                self._next_player_turn()
         return None
 
 
