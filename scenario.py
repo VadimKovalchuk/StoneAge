@@ -52,16 +52,17 @@ class Scenario:
 
         '''
         raw_infra = {'campfire':{},
-                     'farm':{}}
+                     'farm_1':{}}
         for player in self.session.players:
             for location_name in raw_infra:
                 location_data = self.db.location(location_name)
                 location_data.update(raw_infra[location_name])
                 location_data['name'] = location_name
-                location_class = location.Location(location_data)
-                if location_class.type == 'farm':
+                if 'farm' in location_name:
+                    location_class = location.Farm(location_data)
                     player.farm.append(location_class)
                 else:
+                    location_class = location.Location(location_data)
                     player.infra.append(location_class)
 
         return None
@@ -73,9 +74,8 @@ class Scenario:
         Defines amount of items and resources that players should start with
         '''
         for player in self.session.players:
-            for item in range(1,8):
-                for n in range((8-item) * 2):
-                    player.stock.append(items.Item(self.db.item(item)))
+            for i in range(12):
+                player.stock.append(items.Item(self.db.item(name='food')))
 
         return None
 

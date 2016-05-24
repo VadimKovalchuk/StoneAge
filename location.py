@@ -1,5 +1,8 @@
 class Location:
-
+    '''
+    Generic location class that used as general location and used as parent
+    for all other location classes.
+    '''
     def __init__(self, location_data):
         '''
         (list) -> None
@@ -36,13 +39,61 @@ class Location:
                 return True
         return False
 
+    def day(self):
+        return None
+
+    def evening(self):
+        return None
+
+    def night(self):
+        return None
 
     def status(self):
-        status = {'name':self.name,
-                  'slots':[]}
+        status = self.__dict__.copy()
+        status['slots'] = []
         for man in self.slots:
             if man:
                 status['slots'].append(man.map_status())
             else:
                 status['slots'].append(None)
         return status
+
+
+class Campfire(Location):
+    '''
+    Basic Campfire class. Inherits from location class
+    '''
+    def __init__(self,location_data):
+        '''
+
+        '''
+        Location.__init__(self,location_data)
+        self.stage = 'fireless'
+        self.days = 3
+
+        return None
+
+    def status(self):
+        '''
+
+        '''
+        status = Location.status(self)
+        status.update({'stage': self.stage,
+                       'points': self.points,
+                       'days': self.days})
+        return status
+
+class Farm(Location):
+    '''
+    Basic Farm class. Inherits from location class
+    '''
+    def __init__(self,location_data):
+        '''
+
+        '''
+        Location.__init__(self,location_data)
+        self.stage = 'unplowed'
+        self.points = 25
+        self.days = 0
+
+        return None

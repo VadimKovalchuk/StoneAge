@@ -63,7 +63,7 @@ def allocation(player):
     print('location: ',end='')
     location_index = int(input())
     location_name = map_lst[location_index]['name']
-    man_limit = free_slots(map_lst[i]['slots'])
+    man_limit = free_slots(map_lst[location_index]['slots'])
 
     for a in range(man_limit):
         for i in range(len(player.population)):

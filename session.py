@@ -18,7 +18,7 @@ class Session:
         self.map = []
         self.scenario = scenario.Scenario(wzrd.conditions['scenario'],self,self.db)
         self.phase = 'allocation'  # Allocation/Day/Evening/Night
-        self.log = []  # Game events that will be show to player
+        self.log = {}  # Game events that will be show to player
         self.round = 1
         self.points = {}
         self.first_turn = self.players[0]
@@ -155,7 +155,7 @@ class Session:
         if self.phase == 'allocation':
             if self._all_players_done():
                 self.phase = 'day'
-                print(self.rules.process_day_phase())
+                self.log = self.rules.process_day_phase()
             elif not self.player_turn.free_men():
                 self._next_player_turn()
         return None
@@ -171,7 +171,8 @@ class Session:
         status = {'type': 'session',
                   'phase': self.phase,
                   'player_turn': self.player_turn.id,
-                  'map':[]}
+                  'map':[],
+                  'log': self.log}
         for location in self.map:
             status['map'].append(location.status())
         return status
