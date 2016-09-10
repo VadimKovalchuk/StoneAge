@@ -39,9 +39,12 @@ class Core:
 
         Creates session upon passed wizard parameters.
         '''
+        logging.info('Creating new Session [' + str(wiz.id) + ']')
         new_session = session.Session(wiz, self.db)
         self.sessions.append(new_session)
         self.wizards.remove(wiz)
+        logging.debug('Session [' + str(new_session.id) + '] is created. '
+                     'Corresponding Wizard is deleted')
         return None
 
     def add_player(self, id):
@@ -90,6 +93,8 @@ class Core:
 
         # Players are merging to one wizard. Redundant wizard is deleted.
         if int(wiz.conditions['merge']) != wiz.id:
+            logging.debug('Wizard ['+ str(wiz.id) +'] is marked for marging to [' +
+                          str(wiz.conditions['merge']) + ']')
             master_wiz_id = int(wiz.conditions['merge'])
             master_wiz = self.get_instance_by_player(master_wiz_id)
             if 'Wizard' not in str(type(master_wiz)):
@@ -106,6 +111,8 @@ class Core:
                     new_ai['type'] = 'add_bot'
                     new_ai['merge'] = wiz.id
                     self.elder_tasks.append(new_ai)
+                    logging.debug('Requesting bot player ['+ str(new_ai['id'])+
+                                  '] creation')
 
         #
         else:

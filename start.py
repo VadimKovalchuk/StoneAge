@@ -13,6 +13,7 @@ def main():
     for module in infra:
         infra[module].build_connections(infra)
 
+    logging.getLogger("werkzeug").setLevel(logging.WARNING)
     gate.start()
 
 if __name__ == '__main__':

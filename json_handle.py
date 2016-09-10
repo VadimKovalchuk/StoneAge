@@ -36,6 +36,7 @@ class Gate:
         current_session = self.core.get_instance_by_player(player_id)
         if not current_session :
             current_session = self.core.add_player(player_id)
+        logging.info('Player [' + str(player_id) + '] is connected')
         return {'id':player_id,
                 'session_type':str(type(current_session)),
                 'session_id':current_session.id
@@ -56,7 +57,7 @@ class Gate:
         if current_inst and 'Wizard' in str(type(current_inst)):
             return current_inst.change_conditions(new_conditions)
         else:
-            logging.info(str(type(current_inst))+ " is returned when Wizard "
+            logging.error(str(type(current_inst))+ " is returned when Wizard "
                                                   "instance expected")
             return False
 
@@ -89,8 +90,13 @@ class Gate:
 
         response = JSONRPCResponseManager.handle(
             request.data, dispatcher)
-        if response.data['id'] != 1:# and 'result' not in response.data:
+        if response.data['id'] != 1 and 'result' not in response.data:
             print(request.data,'\n',response.data)
+            logging.error('_______________________________________________' +
+                          '\nRequiest is faulty or its handling was not successfull:\n'+
+                          request.data + '\nResponce:\n' + response.data +
+                          '\n---------------------------------------------')
+
         return Response(response.json, mimetype='application/json')
 
 

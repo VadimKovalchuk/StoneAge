@@ -1,4 +1,4 @@
-import time, scenario, rules
+import time, logging, scenario, rules
 
 class Session:
 
@@ -142,7 +142,9 @@ class Session:
         # passed player.
         if player_id == self.player_turn.id:
             self._next_player_turn()
-
+        logging.debug('Session [' + str(self.id) + ']: Player [' +
+                      str(player_id) + '] allocates ' + str(men) +
+                      ' to location [' + location_name + ']')
         return True
 
     def update(self):
@@ -155,6 +157,7 @@ class Session:
         if self.phase == 'allocation':
             if self._all_players_done():
                 self.phase = 'day'
+                logging.info('Session [' + str(self.id) + ']: Day phase is started')
                 self.log = self.rules.process_day_phase()
             elif not self.player_turn.free_men():
                 self._next_player_turn()

@@ -1,4 +1,5 @@
 import location, man, items
+import logging
 
 start_pop_amount = 5
 
@@ -83,6 +84,8 @@ class Scenario:
         '''
 
         '''
+        logging.debug('Session [' + str(self.session.id) + '] is applied with '
+                                'Scenario [' + self.name + ']')
         self._create_map()
         self._starting_population()
         self._starting_infra()

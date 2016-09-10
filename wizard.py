@@ -19,6 +19,7 @@ class Wizard:
                            }
 
         self.players[0].set_session(self)
+        logging.debug('Wizard [' + str(self.id) + '] is created')
 
         return None
 
@@ -28,12 +29,15 @@ class Wizard:
 
         Changes conditions for session creation.
         '''
+        logging.debug('Wizard [' + str(self.id) + '] is updated with parameters:'+
+                      str(new_values))
+
         for parameter in new_values:
             if parameter in self.conditions:
                 self.conditions[parameter]= new_values[parameter]
             else:
-                logging.error("Wrong parameter is sent to Wizard ["+ self.id
-                              +"] conditions")
+                logging.error("Wizard ["+ str(self.id)
+                              +"] Wrong parameter is sent to conditions")
                 return False
         return True
 
@@ -53,6 +57,9 @@ class Wizard:
         Adds passed player to curent players list and replaces his
         active session to self.
         '''
+        logging.debug('Wizard [' + str(self.id) + '] got new player [' +
+                      str(new_player.id) + ']')
+
         self.players.append(new_player)
         new_player.set_session(self)
 

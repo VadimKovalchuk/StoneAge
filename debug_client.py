@@ -55,6 +55,8 @@ def allocation(player):
     men = []
     responce = client.send_request('status',[],player.id)
     map_lst = responce['result']['map']
+    map_lst.extend(player.farm)
+    map_lst.extend(player.infra)
     for i in range(len(map_lst)):
         free = free_slots(map_lst[i]['slots'])
         if free:

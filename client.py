@@ -67,6 +67,8 @@ def deserialize_player_data(player,json_responce):
         man_class = man.Man(player.id,man_data['name'])
         deserialize_man_data(man_class,man_data)
         player.population.append(man_class)
+    player.farm = json_responce['farm']
+    player.infra = json_responce['infra']
 
     return None
 

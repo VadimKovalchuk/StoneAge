@@ -29,10 +29,12 @@ class Elder:
                         'process_creation': 1000,
                         'git_update': 3600000}
         logging.debug('Elder is running')
+        logging.getLogger("requests").setLevel(logging.WARNING)
 
         return None
 
     def _create_bot(self, credent_dict):
+        logging.debug('Creating bot with following parameters ' + str(credent_dict))
         args = ''
         if system() == 'Windows':
             args = python_path +' ai.py' + ' ' + credent_dict['login'] + ' ' + \
@@ -66,6 +68,7 @@ class Elder:
             del self.bot_processes[bot_id]
 
     def process_task(self, task_list):
+        logging.debug('Processing tasks ' + str(task_list))
         #print('processing tasks' + str(task_list))
         for task in task_list:
             if task['type'] == 'add_bot' and task['id'] not in self.bot_processes:
