@@ -48,13 +48,17 @@ def print_responce(responce):
 
 
     if 'result' in responce:
+        print(json.dumps(responce['result'],indent=4))
+        '''
         output_data(responce['result'],0)
         return None
         if type(responce['result']) not in (type(dict),type(list)):
             print(responce['result'])
             return None
+
         for block in responce['result']:
             print(block,"\n\t", responce['result'][block])
+        '''
     else:
         print("Responce has failed\n",responce)
 

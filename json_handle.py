@@ -79,6 +79,7 @@ class Gate:
     @Request.application
     def application(self,request):
         self.request = json.loads(request.data.decode("utf-8"))
+        print(request)
         # Dispatcher is dictionary {<method_name>: callable}
         dispatcher["update"] = self.update
         dispatcher["connect"] = self.player_connect
@@ -101,4 +102,4 @@ class Gate:
 
 
     def start(self):
-        run_simple('localhost', 4000, self.application)
+        run_simple('127.0.0.1', 4000, self.application)
