@@ -33,6 +33,8 @@ class Gate:
 
     def player_connect(self, login, password):
         player_id =self.db.player_login(login, password)
+        if not player_id:
+            return "Invalid credentials"
         current_session = self.core.get_instance_by_player(player_id)
         if not current_session :
             current_session = self.core.add_player(player_id)
@@ -79,7 +81,7 @@ class Gate:
     @Request.application
     def application(self,request):
         self.request = json.loads(request.data.decode("utf-8"))
-        print(request)
+        #print(request)
         # Dispatcher is dictionary {<method_name>: callable}
         dispatcher["update"] = self.update
         dispatcher["connect"] = self.player_connect
