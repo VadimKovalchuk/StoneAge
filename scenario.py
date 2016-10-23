@@ -61,7 +61,7 @@ class Scenario:
                 location_data['name'] = location_name
                 if 'farm' in location_name:
                     location_class = location.Farm(location_data)
-                    player.farm.append(location_class)
+                    player.infra.append(location_class)
                 else:
                     location_class = location.Location(location_data)
                     player.infra.append(location_class)

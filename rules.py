@@ -23,7 +23,7 @@ class Rules:
         locations.extend(self.session.map)
         for player in self.session.players:
             locations.extend(player.infra)
-            locations.extend(player.farm)
+            #locations.extend(player.farm)
 
         for location in locations:
             for man in location.slots:

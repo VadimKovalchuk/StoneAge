@@ -12,7 +12,7 @@ class Player:
         self.stock = []
         self.skills = {}
         self.infra = []     # Locations inside tribe territory and their state
-        self.farm = []      # Tribe farm fields
+        #self.farm = []      # Tribe farm fields
         self.idle_turns = 0 # Number of turns that player was idle
                             # during allocation phase
 
@@ -69,6 +69,5 @@ class Player:
         return {'population': [man.status() for man in self.population],
                 'stock': stock_dict,
                 'skills': self.skills,
-                'infra': [location.status() for location in self.infra],
-                'farm': [farm.status() for farm in self.farm]
+                'infra': [location.status() for location in self.infra]
                 }

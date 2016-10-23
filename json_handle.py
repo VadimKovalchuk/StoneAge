@@ -99,6 +99,8 @@ class Gate:
                           '\nRequiest is faulty or its handling was not successfull:\n'+
                           request.data + '\nResponce:\n' + response.data +
                           '\n---------------------------------------------')
+        if response.data['id'] == 1000:
+            print(request.data,'\n',response.data)
 
         return Response(response.json, mimetype='application/json')
 

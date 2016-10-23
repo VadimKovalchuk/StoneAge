@@ -14,7 +14,7 @@ class Wizard:
                            'scenario': 'free',
                            'players': 4,
                            'map': 'classic',
-                           'state': 'desicion',
+                           'state': 'decision',
                            'merge': self.id
                            }
 

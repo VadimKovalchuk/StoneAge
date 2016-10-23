@@ -63,9 +63,9 @@ class Session:
         for location in player.infra:
             if location.name == location_name:
                 return location
-        for location in player.farm:
-            if location.name == location_name:
-                return location
+        # for location in player.farm:
+        #     if location.name == location_name:
+        #         return location
         return False
 
     def _next_player_turn(self):
@@ -174,8 +174,7 @@ class Session:
         status = {'type': 'session',
                   'phase': self.phase,
                   'player_turn': self.player_turn.id,
-                  'map':[],
-                  'log': self.log}
+                  'map':[]}
         for location in self.map:
             status['map'].append(location.status())
         return status

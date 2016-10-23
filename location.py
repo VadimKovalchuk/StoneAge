@@ -10,11 +10,13 @@ class Location:
         Initial class creation. .
         '''
         self.name = location_data['name']
-        self.type = location_data['type'] #Standard/private/quest/event
-        self.description = location_data['description']
+        self.type = location_data['type'] #Standard/private/quest/event/etc
         self.full_fill = True if location_data['full_fill'] == 1 else False
         self.infinite_slots = True if location_data['infinite_slots'] == 1 else False
         self.slots = [None for i in range(location_data['slots'])]
+        self.stage = None
+        self.points = None
+        self.days = None
 
     def free_slots_amount(self):
         '''
@@ -38,6 +40,9 @@ class Location:
                 self.slots[i] = man
                 return True
         return False
+
+    def allocation(self):
+        return None
 
     def day(self):
         return None
